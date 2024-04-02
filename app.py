@@ -1,5 +1,8 @@
-import streamlit as st
 import pandas as pd
+
+import streamlit as st
+import streamlit_authenticator as stauth
+
 
 from utils import (
     load_food_dict,
@@ -12,20 +15,15 @@ from utils import (
     get_nutrient_summary,
 )
 
-import yaml
-from yaml.loader import SafeLoader
-import streamlit_authenticator as stauth
 
 st.set_page_config(layout="wide")
 
-with open("data/user.yaml") as file:
-    config = yaml.load(file, Loader=SafeLoader)
 
 authenticator = stauth.Authenticate(
-    config["credentials"],
-    config["cookie"]["name"],
-    config["cookie"]["key"],
-    config["cookie"]["expiry_days"],
+    st.secrets["credentials"].to_dict(),
+    st.secrets["cookie"]["name"],
+    st.secrets["cookie"]["key"],
+    st.secrets["cookie"]["expiry_days"],
 )
 
 authenticator.login()
