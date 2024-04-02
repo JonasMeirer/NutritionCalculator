@@ -93,8 +93,8 @@ if st.session_state["authentication_status"]:
 
     st.header("Understanding your nutrition")
 
-    # client = get_client()
-    # all_embeddings = load_food_embeddings()
+    client = get_client()
+    all_embeddings = load_food_embeddings()
 
     food_dict = load_food_dict()
     nutrient_dict = load_nutrient_dict()

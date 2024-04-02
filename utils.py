@@ -127,7 +127,9 @@ def get_embbedding(food_item, client):
 
 
 def load_food_embeddings():
-    all_embeddings = pd.read_csv("data/food_embeddings.csv", index_col=0)
+    all_embeddings = pd.read_csv(
+        "data/food_embeddings.csv", index_col=0, compression="gzip"
+    )
     all_embeddings.columns = pd.RangeIndex(start=0, stop=1536, step=1)
     return all_embeddings
 

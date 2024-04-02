@@ -1,3 +1,5 @@
 .streamlit
-data/*.csv
+data/food.csv
+data/nutrient.csv
+data/food_embeddings_uncompressed.csv
 data/*.yaml
