@@ -109,29 +109,22 @@ if st.session_state["authentication_status"]:
     )
     with st.expander("Collect all food items", expanded=True):
         st.subheader("Search for a food item")
-        # mode = st.checkbox("Pro Version")
+        mode = True  # st.checkbox("Easy Search")
         food_item = st.text_input("Enter a food item")
 
         if food_item:
-            # if not mode:
-            #     # search for food item in food dict, allowing for spelling errors
-            #     search_results = [
-            #         food_dict[key]
-            #         for key, val in food_dict.items()
-            #         if food_item.lower() in val.lower()
-            #     ]
-            #     # sort them by decreasing length
-            #     search_results = sorted(search_results, key=len, reverse=False)
-            # else:
-            #     embedding = get_embbedding(food_item, client)
-            #     search_results = get_closest_embeddings(all_embeddings, embedding, 5)
-
-            search_results = [
-                food_dict[key]
-                for key, val in food_dict.items()
-                if food_item.lower() in val.lower()
-            ]
-            search_results = sorted(search_results, key=len, reverse=False)
+            if not mode:
+                # search for food item in food dict, allowing for spelling errors
+                search_results = [
+                    food_dict[key]
+                    for key, val in food_dict.items()
+                    if food_item.lower() in val.lower()
+                ]
+                # sort them by decreasing length
+                search_results = sorted(search_results, key=len, reverse=False)
+            else:
+                embedding = get_embbedding(food_item, client)
+                search_results = get_closest_embeddings(all_embeddings, embedding, 5)
 
             st.subheader("Results")
             if len(search_results) == 0:
