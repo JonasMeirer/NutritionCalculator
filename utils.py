@@ -138,7 +138,7 @@ def get_closest_embeddings(all_embeddings, embedding, n):
     similarity = all_embeddings.dot(pd.DataFrame(embedding))
 
     # sort by decreasing similarity
-    return list(similarity.sort_values(0, ascending=False).head(10).index)
+    return list(similarity.sort_values(0, ascending=False).head(n).index)
 
 
 def get_nutrient_data(food_id, nutrients):
