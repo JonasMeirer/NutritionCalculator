@@ -204,7 +204,7 @@ st.cache_resource
 def get_nutrient_summary(nutrient_table, timeframe):
     total_nutrition = nutrient_table.sum()
     total_nutrition_df = pd.DataFrame(
-        columns=["Total from food", f"{timeframe}ly Requirement"],
+        columns=["Total from food", f"Requirement ({timeframe})"],
         index=total_nutrition.index,
     )
     for nutrient in total_nutrition.index:
@@ -212,25 +212,23 @@ def get_nutrient_summary(nutrient_table, timeframe):
             total_nutrition[nutrient], ".2f"
         )
         if isinstance(daily_recommendations[nutrient], str):
-            total_nutrition_df.loc[nutrient, f"{timeframe}ly Requirement"] = (
-                daily_recommendations[nutrient]
-            )
+            total_nutrition_df.loc[nutrient, f"Requirement ({timeframe})"] = "bla"
         else:
             if timeframe == "Day":
-                total_nutrition_df.loc[nutrient, f"{timeframe}ly Requirement"] = (
+                total_nutrition_df.loc[nutrient, f"Requirement ({timeframe})"] = (
                     daily_recommendations[nutrient]
                 )
             else:
-                total_nutrition_df.loc[nutrient, f"{timeframe}ly Requirement"] = (
+                total_nutrition_df.loc[nutrient, f"Requirement ({timeframe})"] = (
                     daily_recommendations[nutrient] * 7
                 )
 
             if isinstance(daily_recommendations[nutrient], int):
-                total_nutrition_df.loc[nutrient, f"{timeframe}ly Requirement"] = format(
+                total_nutrition_df.loc[nutrient, f"Requirement ({timeframe})"] = format(
                     daily_recommendations[nutrient], ".0f"
                 )
             else:
-                total_nutrition_df.loc[nutrient, f"{timeframe}ly Requirement"] = format(
+                total_nutrition_df.loc[nutrient, f"Requirement ({timeframe})"] = format(
                     daily_recommendations[nutrient], ".2f"
                 )
     return total_nutrition_df
