@@ -212,16 +212,16 @@ def get_nutrient_summary(nutrient_table, timeframe):
             total_nutrition[nutrient], ".2f"
         )
         if isinstance(daily_recommendations[nutrient], str):
-            total_nutrition_df.loc[nutrient, f"Requirement ({timeframe})"] = "bla"
+            total_nutrition_df.loc[nutrient, f"Requirement ({timeframe})"] = (
+                daily_recommendations[nutrient]
+            )
         else:
             if timeframe == "Day":
                 total_nutrition_df.loc[nutrient, f"Requirement ({timeframe})"] = (
                     daily_recommendations[nutrient]
                 )
             else:
-                total_nutrition_df.loc[nutrient, f"Requirement ({timeframe})"] = (
-                    daily_recommendations[nutrient] * 7
-                )
+                total_nutrition_df.loc[nutrient, f"Requirement ({timeframe})"] = "bla"
 
             if isinstance(daily_recommendations[nutrient], int):
                 total_nutrition_df.loc[nutrient, f"Requirement ({timeframe})"] = format(
