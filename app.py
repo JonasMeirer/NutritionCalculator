@@ -1,6 +1,7 @@
 import pandas as pd
 
 import streamlit as st
+from streamlit.components.v1 import html
 import streamlit_authenticator as stauth
 
 
@@ -18,6 +19,42 @@ from utils import (
 
 st.set_page_config(layout="wide")
 
+st.markdown(
+    """
+    <p style='color:grey; text-align: center'>created by Jonas Meirer</p>
+    <h1 style='text-align: center; '>Welcome</h1>
+    <h2 style='text-align: center; '>Nutritional Profile Calculator</h1>
+    """,
+    unsafe_allow_html=True,
+)
+html(
+    """
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Centered Animation</title>
+            <style>
+                .centered-container {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh; /* This makes the container take the full height of the viewport */
+                }
+            </style>
+        </head>
+        <body>
+            <div class="centered-container">
+                <dotlottie-player src="https://lottie.host/4c620c8a-7490-4497-8a18-44b2f8637931/IMPt6mKSWx.json" background="transparent" speed="1" style="width: 500px;" loop autoplay></dotlottie-player>
+            </div>
+ 
+            <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+        </body>
+        </html>
+        """,
+    height=200,
+)
+
 
 authenticator = stauth.Authenticate(
     st.secrets["credentials"].to_dict(),
@@ -29,7 +66,6 @@ authenticator = stauth.Authenticate(
 authenticator.login()
 
 if st.session_state["authentication_status"]:
-    authenticator.logout()
 
     # state variables
     if "food_df" not in st.session_state:
@@ -89,9 +125,7 @@ if st.session_state["authentication_status"]:
                         axis=0,
                     )
 
-    st.title("goodlife")
-
-    st.header("Understanding your nutrition")
+    # st.title("Nutritional profile calculator")
 
     client = get_client()
 
@@ -99,12 +133,12 @@ if st.session_state["authentication_status"]:
     nutrient_dict = load_nutrient_dict()
 
     # text input
-    st.header("Step 1: Add the foods you eat")
-    st.write(
-        """Of course it's not possible to list it all. 
+    st.header(
+        "Step 1: Add the foods you eat",
+        help="""Of course it's not possible to list it all. 
         But just listing the foods you buy in the supermarket for a week 
         will already give you a good minimum nutritional profile. 
-        """
+        """,
     )
     with st.expander("Collect all food items", expanded=True):
         st.subheader("Search for a food item")
@@ -132,11 +166,16 @@ if st.session_state["authentication_status"]:
                 selected_food = st.selectbox("Select a food item", search_results, None)
                 if selected_food:
                     st.button(
-                        "Add food item", on_click=add_food_item, args=(selected_food,)
+                        "Add food item",
+                        on_click=add_food_item,
+                        args=(selected_food,),
                     )
 
     if st.session_state.food_df is not None:
-        st.header("Step 2: Provide food amounts")
+        st.header(
+            "Step 2: Provide food amounts",
+            help="Please enter the amount directly in the table. You can delete rows by marking them on the left, and then either clicking the delete button, or simply by hitting the return key.",
+        )
         st.session_state.timeframe = st.radio(
             "Interval",
             ["Day", "Week"],
@@ -148,7 +187,9 @@ if st.session_state["authentication_status"]:
         st.session_state.food_df = st.data_editor(
             st.session_state.food_df,
             hide_index=True,
+            num_rows="dynamic",
             disabled=["Food"],
+            use_container_width=True,
             column_config={
                 st.session_state.food_df.columns[1]: st.column_config.NumberColumn(
                     format="%.0f"
