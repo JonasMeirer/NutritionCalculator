@@ -189,7 +189,7 @@ if st.session_state["authentication_status"]:
             hide_index=True,
             num_rows="dynamic",
             disabled=["Food"],
-            use_container_width=True,
+            # use_container_width=True,
             column_config={
                 st.session_state.food_df.columns[1]: st.column_config.NumberColumn(
                     format="%.0f"
