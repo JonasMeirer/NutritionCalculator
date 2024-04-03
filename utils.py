@@ -198,9 +198,7 @@ def get_nutrient_table(food_df, food_dict, timeframe):
     return nutrient_table
 
 
-st.cache_resource
-
-
+@st.cache_resource
 def get_nutrient_summary(nutrient_table, timeframe):
     total_nutrition = nutrient_table.sum()
     total_nutrition_df = pd.DataFrame(
