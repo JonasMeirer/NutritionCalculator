@@ -1,4 +1,5 @@
 pandas
+numpy
 openai
 streamlit
 streamlit_authenticator

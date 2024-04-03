@@ -1,5 +1,6 @@
 import pickle
 import pandas as pd
+import numpy as np
 import requests
 
 import streamlit as st
@@ -82,6 +83,10 @@ daily_recommendations = {
 
 def make_food_dict():
     food_numbers = pd.read_csv("data/food.csv")
+    # drop some food categories
+    food_numbers = food_numbers[
+        ~food_numbers["food_category_id"].isin([26, 27, 25, 24, 21, 22, 3])
+    ]
     # keep only fdc_id and description
     food_numbers = food_numbers[["fdc_id", "description"]]
     # remove duplicates
@@ -120,25 +125,38 @@ def get_client():
     return OpenAI(api_key=st.secrets["openai"])
 
 
-def get_embbedding(food_item, client):
-    response = client.embeddings.create(input=food_item, model="text-embedding-3-small")
+def get_embbedding(food_item, client, dimensions=500):
+    response = client.embeddings.create(
+        input=food_item, model="text-embedding-3-small", dimensions=dimensions
+    )
 
-    return response.data[0].embedding
+    return np.array(response.data[0].embedding)
+
+
+def get_all_embeddings(data, client, batch_size=200, dimensions=500):
+    embeddings = []
+    for i in range(0, len(data), batch_size):
+        batch = data[i : i + batch_size]
+        embeddings.extend(
+            client.embeddings.create(
+                input=batch, model="text-embedding-3-small", dimensions=dimensions
+            ).data
+        )
+    return embeddings
 
 
 def load_food_embeddings():
-    all_embeddings = pd.read_csv(
-        "data/food_embeddings.csv", index_col=0, compression="gzip"
-    )
-    all_embeddings.columns = pd.RangeIndex(start=0, stop=1536, step=1)
+    all_embeddings = np.load("data/food_embeddings_500.npy")
     return all_embeddings
 
 
-def get_closest_embeddings(all_embeddings, embedding, n):
-    similarity = all_embeddings.dot(pd.DataFrame(embedding))
+def get_closest_embeddings(embedding, food_dict, n):
+    all_embeddings = load_food_embeddings()
+    similarity = np.dot(all_embeddings, embedding)
 
+    top_n = np.argsort(similarity)[::-1][:n]
     # sort by decreasing similarity
-    return list(similarity.sort_values(0, ascending=False).head(n).index)
+    return [list(food_dict.values())[i] for i in top_n]
 
 
 def get_nutrient_data(food_id, nutrients):
