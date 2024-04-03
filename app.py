@@ -93,8 +93,8 @@ if st.session_state["authentication_status"]:
 
     st.header("Understanding your nutrition")
 
-    client = get_client()
-    all_embeddings = load_food_embeddings()
+    # client = get_client()
+    # all_embeddings = load_food_embeddings()
 
     food_dict = load_food_dict()
     nutrient_dict = load_nutrient_dict()
@@ -109,7 +109,7 @@ if st.session_state["authentication_status"]:
     )
     with st.expander("Collect all food items", expanded=True):
         st.subheader("Search for a food item")
-        mode = True  # st.checkbox("Easy Search")
+        mode = False  # st.checkbox("Easy Search")
         food_item = st.text_input("Enter a food item")
 
         if food_item:
