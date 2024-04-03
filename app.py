@@ -21,8 +21,8 @@ st.set_page_config(layout="wide")
 
 st.markdown(
     """
-    <p style='color:grey; text-align: center'>created by Jonas</p>
-    <h1 style='text-align: center; '>Welcome</h1>
+    <p style='color:grey; text-align: center; margin-bottom: 0'>created by Jonas</p>
+    <h1 style='text-align: center; padding-top:0 '>Welcome</h1>
     <h2 style='text-align: center; '>Nutritional Profile Calculator</h1>
     """,
     unsafe_allow_html=True,
