@@ -1,8 +1,13 @@
 .streamlit
 data/food.csv
 data/nutrient.csv
+
 data/food_embeddings_uncompressed.csv
 data/*.yaml
 
 .DS_Store
 *.pyc
+
+.vscode/*
+
+notebooks/*

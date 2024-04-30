@@ -10,7 +10,6 @@ from utils import (
     load_nutrient_dict,
     get_client,
     get_embbedding,
-    load_food_embeddings,
     get_closest_embeddings,
     get_nutrient_table,
     get_nutrient_summary,
@@ -125,7 +124,8 @@ if st.session_state["authentication_status"]:
                         axis=0,
                     )
 
-    # st.title("Nutritional profile calculator")
+    def update_food_df(df):
+        st.session_state.food_df = df
 
     client = get_client()
 
@@ -184,7 +184,7 @@ if st.session_state["authentication_status"]:
             horizontal=True,
         )
 
-        st.session_state.food_df = st.data_editor(
+        st.data_editor(
             st.session_state.food_df,
             hide_index=True,
             num_rows="dynamic",
@@ -195,6 +195,8 @@ if st.session_state["authentication_status"]:
                     format="%.0f"
                 )
             },
+            on_change=update_food_df,
+            args=(st.session_state.food_df,),
         )
 
         st.header("Step 3: Nutrition Analysis")
